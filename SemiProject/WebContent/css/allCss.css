@@ -1,0 +1,33 @@
+@charset "UTF-8";
+
+
+hr {
+    background-color: lightgray;
+    height: 2px;
+}
+
+
+.button {
+    width: 120px;
+    height: 40px;
+    letter-spacing: 2.5px;
+    /*글자 간격*/
+    font-weight: 700;
+    /*글자 진하기 100 - 900*/
+    color: #000;
+    background-color: #FFF;
+    border: none;
+    border-radius: 45px;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease 0s;
+    cursor: pointer;
+    outline: none;
+}
+
+.button:hover {
+    background-color: #d9ead8;
+    box-shadow: 0px 5px 10px rgba(217, 234, 216, 0.4);
+    transform: translateY(-1px);
+}
+
+

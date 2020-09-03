@@ -1,0 +1,5 @@
+1.이미지가져오기 기능(DB)추가, 이미지가져와서 CommunityContentServlet의 RequestDispatcher에 SetAttribute시킴("PostImageList")
+2.레시피게시판에 레시피재료, 단계가져오기
+3.상세검색(제목,제목+내용,작성자) 구현(아직 StoryMain.jsp에만 연결) 
+--> 4. 검색페이지 네비게이션 오류 수정
+5. 커뮤니티통합 (메인화면은 CommunityMain으로 통합, 컨텐츠는 레시피는 Recipe.jsp 나머지는 CommunityContent.jsp)
