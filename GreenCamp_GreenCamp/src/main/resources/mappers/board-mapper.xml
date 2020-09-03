@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="boardMapper">
+
+
+	<resultMap type="Board" id="boardResultSet">
+		<id property="bNo" column="B_NO" />
+		<result property="mId" column="M_ID" />
+		<result property="bTitle" column="B_TITLE" />
+		<result property="bDetail" column="B_DETAIL" />
+		<result property="bViewCnt" column="B_VIEWCNT" />
+		<result property="bLikeCnt" column="B_LIKECNT" />
+		<result property="bDate" column="B_DATE" />
+		<result property="bType" column="B_TYPE" />
+	</resultMap>
+
+	<resultMap type="BoardComment" id="BoardCommentResultSet">
+		<id property="commentNo" column="COMMENT_NO" />
+		<result property="bNo" column="B_NO" />
+		<result property="comment" column="COMMENT" />
+		<result property="commentDate" column="COMMENT_DATE" />
+		<result property="commentWriter" column="COMMENT_WRITER"/>
+	</resultMap>
+	
+	
+
+
+	<select id="getListCount" parameterType="string" resultType="_int">
+		SELECT COUNT(*)
+		FROM BOARD
+		<where>
+		 1=1
+		<choose>
+			<when test="'#{bType}' != null and '#{bType}' == '자유'">
+				AND B_TYPE LIKE #{bType}
+			</when>
+			<when test="'#{bType}' != null and '#{bType}' == '레시피'">
+				AND B_TYPE LIKE #{bType}
+			</when>
+			<when test="'#{bType}' != null and '#{bType}' == '가이드'">
+				AND B_TYPE LIKE #{bType}
+			</when>
+			<otherwise>
+				AND B_TYPE LIKE #{bType}
+			</otherwise>
+		</choose>	
+		</where>
+		ORDER BY B_NO DESC
+	</select>
+	
+	<select id="selectList" parameterType="string" resultMap="boardResultSet">
+	SELECT *FROM BOARD
+		<where>
+			1 = 1 
+		<choose>
+			<when test="'#{bType}' != null and '#{bType}' == '자유'">
+				AND B_TYPE LIKE #{bType}
+			</when>
+			<when test="'#{bType}' != null and '#{bType}' == '레시피'">
+				AND B_TYPE LIKE #{bType}
+			</when>
+			<when test="'#{bType}' != null and '#{bType}' == '가이드'">
+				AND B_TYPE LIKE #{bType}
+			</when>
+			<otherwise>
+				AND B_TYPE LIKE #{bType}
+			</otherwise>
+		</choose>	
+		</where>
+		ORDER BY B_NO DESC
+	</select>
+	
+	<!-- QnA 최신글 번호 조회 -->
+	<select id="selectBoardLatestNo" parameterType="string" resultType="_int">
+		SELECT B_NO FROM (SELECT * FROM Board ORDER BY B_NO DESC) 
+		WHERE ROWNUM = 1
+	</select>
+  	
+  	<!-- 공지사항 등록 쿼리 -->
+  	<insert id="insertboard" parameterType="Board">
+  		INSERT INTO Board
+  		VALUES(SEQ_BOARD_NO.NEXTVAL,#{mId},#{bTitle},#{bDetail},0,0,SYSDATE,#{bType})
+<!--   		<where>
+			1 = 1 
+		<choose>
+			<when test="'#{bType}' != null and '#{bType}' == '자유'">
+				AND B_TYPE LIKE #{bType}
+			</when>
+			<when test="'#{bType}' != null and '#{bType}' == '레시피'">
+				AND B_TYPE LIKE #{bType}
+			</when>
+			<when test="'#{bType}' != null and '#{bType}' == '가이드'">
+				AND B_TYPE LIKE #{bType}
+			</when>
+			<otherwise>
+				AND B_TYPE LIKE #{bType}
+				OR B_NO = #{bNo}
+			</otherwise>
+		</choose>	
+	</where> -->
+  		
+  	</insert>
+	
+	
+
+	<select id="selectOne" parameterType="string" resultMap="boardResultSet">
+		SELECT *
+		FROM BOARD
+		<where>
+			1 = 1 
+		<choose>
+			<when test="'#{bType}' != null and '#{bType}' == '자유'">
+				AND B_TYPE LIKE #{bType}
+			</when>
+			<when test="'#{bType}' != null and '#{bType}' == '레시피'">
+				AND B_TYPE LIKE #{bType}
+			</when>
+			<when test="'#{bType}' != null and '#{bType}' == '가이드'">
+				AND B_TYPE LIKE #{bType}
+			</when>
+			<otherwise>
+				AND B_TYPE LIKE #{bType}
+				OR B_NO = #{bNo}
+			</otherwise>
+		</choose>	
+	</where>
+	</select>
+	
+	<update id="updateCount" parameterType="_int">
+		UPDATE BOARD
+		SET B_VIEWCNT = b_ViewCnt + 1
+		WHERE B_NO = #{bNo}
+	</update>
+	
+	
+	<select id="searchList" parameterType="BoardSearch" resultMap="boardResultSet">
+	SELECT * FROM BOARD
+	<where>
+		<choose>
+			<when test="searchCondition == 'title'">
+				B_TITLE LIKE '%' || #{searchValue } ||  '%'
+			</when>
+			<when test="searchCondition == 'writer'">
+				AND M_ID LIKE '%' || #{searchValue } || '%'
+			</when>
+			<when test="searchCondition == 'category'">
+				AND B_TYPE LIKE '%' || #{searchValue } || '%'
+			</when>
+			<otherwise>
+				 AND (M_ID LIKE '%' || #{searchValue } || '%'
+				OR B_TITLE LIKE '%' || #{searchValue } ||  '%'
+				OR B_DETAIL LIKE '%' || #{searchValue } || '%')
+			</otherwise>
+		</choose>	
+	</where>
+	ORDER BY B_DATE DESC
+</select>
+	
+	<update id="addLike" parameterType="_int">
+		UPDATE BOARD
+		SET B_LIKECNT=B_LIKECNT+1
+		WHERE B_NO= #{bNo}
+
+	</update>
+	
+	<select id="TypeList" parameterType="OrderCondition" resultMap="boardResultSet">
+	SELECT * FROM BOARD
+	<where>
+	B_TYPE = #{bType}
+	<choose>
+			<when test="typeData.equals('bViewCnt')">
+				ORDER BY B_VIEWCNT DESC
+			</when>
+			<when test="typeData.equals('bLikeCnt')">
+				ORDER BY B_LIKECNT DESC
+			</when>
+			<otherwise>
+				ORDER BY B_DATE DESC
+			</otherwise>
+		</choose>	
+	</where>
+	</select>
+	
+	<insert id="insertReply">
+	INSERT INTO BOARDCOMMENT VALUES(SEQ_BOADCOM_NO.NEXTVAL, #{bNo}, #{comment}, SYSDATE, #{commentWriter} )
+	
+	</insert>
+	
+	<select id="selectReplyList" resultMap="BoardCommentResultSet">
+	SELECT * FROM BOARDCOMMENT WHERE B_NO = #{bNo}
+	
+	</select>
+	
+	<delete id="deleteBoardComment">
+	DELETE FROM boardComment where comment_no = #{commentNo}
+	</delete>
+	
+	<update id="updateBoardComment">
+	UPDATE BOARDCOMMENT SET "COMMENT" = #{modifyComment} WHERE COMMENT_NO = #{commentNo}
+	</update>
+	
+	<select id="selectOneBoard" resultMap="boardResultSet">
+	SELECT *
+	FROM BOARD
+	WHERE B_NO = #{bNo}
+	</select>
+	
+	<update id="updateBoard">
+	UPDATE BOARD SET b_title = #{bTitle}, b_detail = #{bDetail} where b_No = #{bNo}
+	</update>
+	
+	<delete id="deleteBoard">
+	
+	DELETE FROM BOARD WHERE B_NO = #{bNo}
+	
+	</delete>
+
+</mapper>

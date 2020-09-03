@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>나만의 캠핑장 게시글 등록</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<link rel="stylesheet" href="../../resources/css/myCampcss/assets/css/myCampDetail.css" />
+</head>
+<body class="single is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+                
+                <h1>나만의 캠핑장_게시글 등록</h1>
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<article class="post">
+								<!--<header>
+									<div class="title">
+										<h2><a href="#">차박할만한곳 추천합니드아</a></h2>
+										<p>태그는 뭐시꺵이 #분위기좋은 #공기좋은</p>
+									</div>
+									<div class="meta">
+										<time class="published" datetime="2015-11-01">November 1, 2015</time>
+										<a href="#" class="author"><span class="name">Jane Doe</span><img src="images/avatar.jpg" alt="" /></a>
+									</div>
+								</header>-->
+                                <!--메인사진 -->
+                            
+                                <span class="mycampmainimg">
+                                    <img src="../../resources/css/myCampcss/assets/css/images/pic01.jpg" width="400px;" height="300px">
+                                </span>
+                                
+                                <form enctype="multipart/form-data" action="${pageContext.request.contextPath }/freeboard_write.do" method="post">  
+        <div class="row"> 
+            <div class="col-md-6"> 
+            <div class="form-group"> 
+            <label for="writer">작성자</label> 
+            <input type="text" class="form-control" name="writer" id="writer" value="${sessionScope.memberVO.memberName }" readonly> 
+            </div> 
+            </div>
+            <input type="hidden" id="id" name="id" value="${sessionScope.memberVO.id }">
+        </div> 
+        
+        <div class="form-group" style="margin-right: 70px"> 
+        <label for="title">글제목</label> 
+        <input type="text" class="form-control" name ="title" id="title" value="" required="required"> 
+        </div> 
+        
+        <div class="form-group" style="margin-right: 70px"> 
+        <label for="content">글내용</label> 
+        <textarea class="form-control" rows="10" name="content" id="content" required="required"></textarea> 
+        </div>
+        
+ 
+        <div class="form-group"> 
+        <label for="File">첨부파일 1</label> 
+        <input type="file" name="file[0]"> 
+        </div> 
+        <div class="form-group"> 
+        <label for="File">첨부파일 2</label> 
+        <input type="file" name="file[1]"> 
+        </div> 
+        <div class="form-group"> 
+        <label for="File">첨부파일 3</label> 
+        <input type="file" name="file[2]"> 
+        </div> 
+        <br><br>
+        <div class="center-block" style='width:400px' align="center"> 
+        <input type="submit" class="btn btn-info" value="등록하기" style="background-color: #2dcb73">&nbsp;&nbsp;
+        <input type="reset" class="btn btn-info"  value="다시쓰기" style="background-color: #2dcb73">&nbsp;&nbsp;
+        <input type="button" class="btn btn-info"  value="취소" id="cancelBtn" style="background-color: #2dcb73">
+        </div>
+</form> 
+                    
+                        
+                        </article>
+                        
+                        
+                </div>
+				<!-- Footer -->
+					<section id="footer">
+						<ul class="icons">
+							<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+							<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+							<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+							<li><a href="#" class="icon solid fa-rss"><span class="label">RSS</span></a></li>
+							<li><a href="#" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+						</ul>
+						<p class="copyright">&copy; Untitled. Design: <a href="http://html5up.net">HTML5 UP</a>. Images: <a href="http://unsplash.com">Unsplash</a>.</p>
+					</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="resources/css/myCampcss/assets/js/browser.min.js"></script>
+			<script src="resources/css/myCampcss/assets/js/breakpoints.min.js"></script>
+			<script src="resources/css/myCampcss/assets/js/jquery.min.js"></script>
+			<script src="resources/css/myCampcss/assets/js/util.js"></script>
+			<script src="resources/css/myCampcss/assets/js/main.js"></script>
+
+	</body>
+</html>

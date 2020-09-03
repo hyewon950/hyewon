@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GoGreen 메인페이지</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../../resources/css/nav.css" />
+    <link rel="stylesheet" href="../../resources/css/mainpage.css" />
+    <link rel="stylesheet" href="../../resources/css/footer.css" />
+    <!--fontawesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
+
+</head>
+
+<body>
+
+    <!-- Nav -->
+    
+    <c:url var="myclist" value="myclist.do"></c:url>
+    
+    <nav id="nav">
+        <ul>
+            <li class="current"><a href="index.html">Home</a></li>
+
+            <li>
+                <a href="#">캠핑장 예약</a>
+                <ul>
+                    <li><a href="#">캠핑장 전체 리스트 보기</a></li>
+                    <li><a href="#">지도로 찾기</a></li>
+                </ul>
+            </li>
+            <li><a href="left-sidebar.html">중고거래</a>
+
+            </li>
+            <li><a href="${myclist}">나만의 캠핑</a></li>
+            <li><a href="no-sidebar.html">커뮤니티</a>
+                <ul>
+                    <li><a href="#">용품 추천</a></li>
+                    <li><a href="#">레시피 추가</a></li>
+                    <li><a href="#">캠핑 노하우</a></li>
+                    <li><a href="#">자유게시판</a></li>
+                </ul>
+            </li>
+
+            <li><a href="#">로그인</a>
+                <ul>
+                    <li><a href="#">로그인</a></li>
+                    <li><a href="#">회원가입</a></li>
+                </ul>
+            </li>
+
+            <li><a href="#">마이페이지</a>
+                <ul>
+                    <li><a href="#">나의 예약 정보</a></li>
+                    <li><a href="#">나의 중고상품</a>
+                        <ul>
+                            <li><a href="#">등록한 중고상품</a></li>
+                            <li><a href="#">찜한 중고상품</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">회원정보</a>
+                        <ul>
+                            <li><a href="#">수정</a></li>
+                            <li><a href="#">탈퇴</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#">
+                    <!--<i class="fa fa-comment fa-2x"></i>-->
+                    채팅 <i class="far fa-comment fa-1x"></i>
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+
+    <!-- Header -->
+    <section id="header">
+
+        <!-- Banner -->
+        <section id="banner">
+            <header>
+                <h2>Howdy. This is Dopetrope.</h2>
+                <p>A responsive template by HTML5 UP</p>
+            </header>
+        </section>
+
+
+
+        <!-- Intro -->
+        <section id="intro" class="container">
+            <div class="row">
+                <div class="col-4 col-12-medium">
+                    <section class="first">
+                        <i class="icon solid featured fa-cog"></i>
+                        <header>
+                            <h2>Ipsum consequat</h2>
+                        </header>
+                        <p>Nisl amet dolor sit ipsum veroeros sed blandit consequat veroeros et magna tempus.</p>
+                    </section>
+                </div>
+                <div class="col-4 col-12-medium">
+                    <section class="middle">
+                        <i class="icon solid featured alt fa-bolt"></i>
+                        <header>
+                            <h2>Magna etiam dolor</h2>
+                        </header>
+                        <p>Nisl amet dolor sit ipsum veroeros sed blandit consequat veroeros et magna tempus.</p>
+                    </section>
+                </div>
+                <div class="col-4 col-12-medium">
+                    <section class="last">
+                        <i class="icon solid featured alt2 fa-star"></i>
+                        <header>
+                            <h2>Tempus adipiscing</h2>
+                        </header>
+                        <p>Nisl amet dolor sit ipsum veroeros sed blandit consequat veroeros et magna tempus.</p>
+                    </section>
+                </div>
+            </div>
+            <footer>
+                <ul class="actions">
+                    <li><a href="#" class="button large">Get Started</a></li>
+                    <li><a href="#" class="button alt large">Learn More</a></li>
+                </ul>
+            </footer>
+        </section>
+
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <div class="container">
+            <div class="row gtr-200">
+                <div class="col-12">
+
+                    <!-- About -->
+                    <section>
+                        <h2 class="major"><span style="background-color:#f2f5f3;">What's this about?</span></h2>
+                        <p>
+                            This is <strong>TXT</strong>, yet another free responsive site template designed by
+                            <a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net">HTML5 UP</a>. It's released under the
+                            <a href="http://html5up.net/license/">Creative Commons Attribution</a> license so feel free to use it for
+                            whatever you're working on (personal or commercial), just be sure to give us credit for the design.
+                            That's basically it :)
+                        </p>
+                    </section>
+
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div id="copyright">
+                <ul class="menu">
+                    <li>&copy; Untitled. All rights reserved</li>
+                    <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </footer>
+
+
+    Scripts 
+    <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="../../../resources/js/jquery.dropotron.min.js"></script>
+    <script src="../../../resources/js/jquery.scrolly.min.js"></script>
+    <script src="../../../resources/js/main.js"></script>
+    <script src="../../../resources/js/breakpoints.min.js"></script>
+
+
+    <!-- Scripts -->
+   <!-- <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.dropotron.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>-->
+
+
+</body></html>

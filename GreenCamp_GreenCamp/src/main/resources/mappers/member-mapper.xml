@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="memberMapper">
+  
+  <resultMap type="Member" id="memberResultSet">
+		<!-- 프라이머리키만 id로 설정 -->
+		<id property="mId" column="M_ID" />
+		<result property="mPwd" column="M_PWD" />
+		<result property="mName" column="M_NAME" />
+		<result property="mBirthday" column="M_BIRTHDAY" />
+		<result property="mEmail" column="M_EMAIL" />
+		<result property="mPhone" column="M_PHONE" />
+		<result property="mEnrollDate" column="M_ENROLLDATE" />
+		<result property="mNo" column="M_NO" />
+		<result property="mStatusYN" column="M_STATUS" />
+		<result property="mKey" column="M_KEY" />
+
+	</resultMap>
+
+	<!-- 로그인 -->
+	<select id="selectOne" parameterType="Member" resultMap="memberResultSet">
+		select * from member
+		where M_ID = #{mId}
+		and M_PWD = #{mPwd}
+		<!-- and M_STATUS ='N' -->
+	
+	</select>
+	
+	
+	<!-- 이메일 인증 난수 키값으로 회원가입  -->
+	<insert id="insertMemberEmailKey" parameterType="Member">
+	INSERT INTO MEMBER 
+	VALUES( #{mId}, #{mPwd}, #{mName}, #{mBirthday}, #{mEmail}, #{mPhone}, SYSDATE, SEQ_MEMBER_NO.nextval, DEFAULT, #{mKey})
+	
+	</insert>
+	
+	<!-- 이메일 인증 확인 메서드 (Y 값으로 바꿔주는 메서드) -->
+	<update id="alterMemberKey" parameterType="Member">
+		update member
+		set m_key = 'Y'
+		where m_key = #{mKey}
+	</update>
+	
+	<!-- ID중복검사 -->
+	<select id="checkIdDup" parameterType="String" resultType="_int">
+		select count(*) from member
+		where M_ID = #{mId}
+	</select>
+	
+	<!-- 아이디 비밀번호 일치하는지 확인 -->
+	<select id="idpwdCheck" parameterType="String" resultType="_int">
+		select count(*) from member
+		where M_ID = #{mId} and m_pwd = #{mPwd}
+	</select>
+	
+	
+	<!-- 회원 탈퇴 -->
+	<update id="deleteMember" parameterType="Member">
+		UPDATE MEMBER
+		SET M_STATUS ='Y'
+		WHERE M_ID = #{mId}
+	</update>
+	
+	<!-- 회원 탈퇴 취소 -->
+	<update id="deleteMemberRevert" parameterType="Member">
+		UPDATE MEMBER
+		SET M_STATUS ='N'
+		WHERE M_ID = #{mId}
+	</update>
+	
+  <!-- 회원 정보 수정 -->
+  <update id="updateMember" parameterType="Member">
+  	update member
+  	set M_PWD = #{mPwd }, m_phone = #{mPhone }, m_email = #{mEmail}, m_birthday=#{mBirthday}
+  	where M_ID = #{mId}
+  </update>
+  
+  <!-- ID찾기시 인증키값  -->
+  <update id="findIdEmailKey" parameterType="Member">
+  	update member
+  	set M_KEY = #{mKey}
+  	where M_Name = #{mName} and M_EMAIL = #{mEmail}
+  </update>
+  
+  <!-- ID찾기후 ID알려주는 값 -->
+  <select id="findIdAfter" parameterType="Member" resultMap="memberResultSet">
+		select * from member
+		where M_NAME=#{mName} and M_EMAIL = #{mEmail}
+	
+	</select>
+	
+	<!-- pwd찾기 후 회원정보저장 -->
+  <select id="findPwdAfter" parameterType="Member" resultMap="memberResultSet">
+		select * from member
+		where M_ID = #{mId}
+	</select>
+  
+  
+  <!-- pwd찾기 후 회원 정보 수정 -->
+  <update id="findPwdUpdate" parameterType="Member">
+  	update member
+  	set M_PWD = #{mPwd }
+  	where M_ID = #{mId}
+  </update>
+  
+</mapper>

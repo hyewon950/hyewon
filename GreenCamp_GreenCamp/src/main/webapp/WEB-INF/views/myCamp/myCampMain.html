@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />	
+<title>MyCamp</title>
+<link rel="stylesheet" href="resources/css/myCampcss/assets/css/myCampMain.css" />
+ <link rel="stylesheet" href="../../../resources/css/footer.css" />
+<link rel="stylesheet" href="../../../resources/css/nav.css"/>
+</head>
+<body id="top">
+	
+			<!-- Nav -->
+	<nav id="nav">
+		<ul>
+			<li class="current"><a href="index.html">Home</a></li>
+
+			<li><a href="#">캠핑장 예약</a>
+				<ul>
+					<li><a href="#">캠핑장 전체 리스트 보기</a></li>
+					<li><a href="#">지도로 찾기</a></li>
+				</ul></li>
+			<li><a href="left-sidebar.html">중고거래</a></li>
+			<li><a href="right-sidebar.html">나만의 캠핑</a></li>
+			<li><a href="no-sidebar.html">커뮤니티</a>
+				<ul>
+					<li><a href="#">용품 추천</a></li>
+					<li><a href="#">레시피 추가</a></li>
+					<li><a href="#">캠핑 노하우</a></li>
+					<li><a href="#">자유게시판</a></li>
+				</ul></li>
+
+			<li><a href="#">로그인</a>
+				<ul>
+					<li><a href="#">로그인</a></li>
+					<li><a href="#">회원가입</a></li>
+				</ul></li>
+
+			<li><a href="#">마이페이지</a>
+				<ul>
+					<li><a href="#">나의 예약 정보</a></li>
+					<li><a href="#">나의 중고상품</a>
+						<ul>
+							<li><a href="#">등록한 중고상품</a></li>
+							<li><a href="#">찜한 중고상품</a></li>
+						</ul></li>
+					<li><a href="#">회원정보</a>
+						<ul>
+							<li><a href="#">수정</a></li>
+							<li><a href="#">탈퇴</a></li>
+						</ul></li>
+				</ul></li>
+
+			<li><a href="#"> <!--<i class="fa fa-comment fa-2x"></i>-->
+					채팅 <i class="far fa-comment fa-2x"></i>
+			</a></li>
+
+		</ul>
+	</nav>
+	
+	
+			<!-- Banner -->
+			<!--
+				To use a video as your background, set data-video to the name of your video without
+				its extension (eg. images/banner). Your video must be available in both .mp4 and .webm
+				formats to work correctly.
+			-->
+				<section id="banner" data-video="images/banner">
+					<div class="inner">
+						<header>
+							<h1>MY CAMP</h1>
+							<p>여기다가 태그를 만들까여 밑에다가 만들어야할까요 여기를 없앨까요 고민중입니다<br />
+							designed by <a href="https://templated.co/">Templated</a> and released under the Creative Commons License.</p>
+						</header>
+						<a href="#main" class="more">Learn More</a>
+					</div>
+				</section>
+
+			<!-- Main -->
+				<div id="main"> 
+                    <br>
+                   <%--  <h1 id="myCampCnt" style="text-align:center"> 총 ${mycpi.mycListCount } 의 숨겨진 명소가 등록되어있습니다</h1> --%>
+                    <h1 id="myCampCnt" style="text-align:center"> 총 ${mycpi.mycListCount } 의 숨겨진 명소가 등록되어있습니다</h1>
+                    <br><br>
+                    <div class="mainmap" style="text-align:center;color:black;" >
+                        <img src="resources/css/myCampcss/assets/css/images/pic01.jpg">이거슨지도입니당
+                    </div>
+                    <br><br><br><br><br><hr>
+                    
+                    <a href="MyCampInsert.html" style="float:right;color:black">글쓰기</a>
+                    <button onclick="location.href='#';">글쓰기</button>
+                    <br>
+                    <br>
+					
+					<!--태그만드는중...-->
+        <div class="myCampTag">
+            <fieldset>
+                <legend>입력</legend>
+                <button value="안농" id="inputs" class="inputs">안농</button>
+                <button value="하이" id="inputs" class="inputs">하이</button>
+                <button value="가가" id="inputs" class="inputs">가가</button>
+                <button value="거거" id="inputs" class="inputs">거거</button>
+                <button value="나나" id="inputs" class="inputs">나나</button>
+                <button value="너너" id="inputs" class="inputs">너너</button>
+                <button value="다다" id="inputs" class="inputs">다다</button>
+                <button value="라라" id="inputs" class="inputs">라라</button>
+                <button value="마마" id="inputs" class="inputs">마마</button>
+                <button value="바바" id="inputs" class="inputs">바바</button>
+            </fieldset><br>
+            <p style="border:1px solid red; color:black;" id="print3">태그나와요요요</p>
+            <p style="border:1px solid red; color:black;" id="print4"></p>
+            <div id="result1"> </div>
+            <button onclick="printTest();">입력 태그 한번에 보기 </button>
+            <script>
+                var data = new Array();
+                var hi = null;
+
+                $(document).ready(function() {
+
+                    $(".inputs").click(function() {
+
+                        var print2 = document.getElementById("print3");
+
+                        hi = $(this).attr('value');
+                        if ($.inArray(hi, data) > -1) {
+                            console.log("있다네");
+
+                            var search = data.indexOf(hi);
+                            if (search != -1) {
+                                data.splice(search, 1); // "A"를 찾아서 삭제한다.
+                            }
+                            var str = data.join();
+                            print3.innerHTML = str;
+                        } else {
+                            data.push($(this).attr('value'));
+                            var str = data.join();
+                            print3.innerHTML = str;
+                            clickCnt += 1;
+                        }
+
+
+                    });
+
+                });
+
+                /*한번에 출력되는지 보는거*/
+                function printTest() {
+                    var print2 = document.getElementById("print4");
+                    var str = data.join();
+                    print4.innerHTML = str;
+                }
+            </script>
+        </div>
+		<!-- 태그여기까지 -->
+                    
+                    <div class="inner">
+
+					<!-- Boxes -->
+						<div class="thumbnails">
+							<c:forEach var="myc" items="${list }">
+							<div class="box">
+								<a href="myCampDetail.html" class="image fit"><img src="resources/css/myCampcss/assets/css/images/pic01.jpg" alt="" /></a>
+								<div class="inner">
+									<h3>${myc.mycTitle}</h3>
+									<p style="color:black;">${myc.mycDetail}</p>
+									<c:url var="mycdetail" value="mycdetail.do">
+									<c:param name="mycNo" value="${myc.mycNo }"/>
+									<c:param name="page" value="${mycpi.mycCurrentPage }"/>
+									</c:url>
+									<a href="${mycdetail }" class="button fit">상세보기</a>
+                                    <p style="color:black;">${myc.mycTag}</p>
+								</div>
+							</div>
+						</c:forEach>
+						
+						</div>
+
+					</div>
+				</div>
+
+	
+
+		<!-- Scripts -->
+			<script src="resources/css/myCampcss/assets/js/jquery.min.js"></script>
+			<script src="resources/css/myCampcss/assets/js/jquery.scrolly.min.js"></script>
+			<script src="resources/css/myCampcss/assets/js/jquery.poptrox.min.js"></script>
+			<script src="resources/css/myCampcss/assets/js/skel.min.js"></script>
+			<script src="resources/css/myCampcss/assets/js/util.js"></script>
+			<script src="resources/css/myCampcss/assets/js/main.js"></script>
+
+	</body>
+</html>

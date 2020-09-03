@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="campingMapper">
+	
+	<resultMap type="Camping" id="CampingResultSet">
+		<id property="cNo" column="CAMP_NO"/>
+	<result property="cImg" column="C_IMG"/>
+	<result property="cName" column="C_NAME"/>
+	<result property="cType" column="C_TYPE"/>
+	<result property="cAddr" column="C_ADDR"/>
+	<result property="cPhone" column="C_PHONE"/>
+	<result property="cParkSum" column="C_PARKSUM"/>
+	<result property="cConUtil" column="C_CVNUTIL"/>
+	<result property="cSafe" column="C_SAFEUTIL"/>
+	<result property="cEtc" column="C_ETCTIL"/>
+	<result property="cTime" column="C_TIME"/>
+	<result property="cCharge" column="C_CHARGE"/>
+	<result property="cManageTel" column="C_MANAGETEL"/>
+	<result property="latitude" column="C_LATITUDE"/>
+	<result property="longitude" column="C_LONGITUDE"/>
+	<result property="clocal" column="C_LOCAL"/>
+	<result property="cRoomsSum" column="C_ROOMSUM"/>
+	<result property="cCount" column="C_COUNT"/>
+	<result property="cRecom" column="C_RECOMMEND"/>
+	
+	</resultMap>
+	
+	<resultMap type="Reservation" id="ReservationResultSet">
+		<result property="resNo" column="RES_NO"/>
+		<result property="cNo" column="CAMP_NO"/>
+		<result property="startDate" column="START_DATE"/>
+		<result property="endDate" column="END_DATE"/>
+		<result property="mId" column="M_ID"/>
+		<result property="sumPeople" column="SUM_PEOPLE"/>
+	
+	</resultMap>
+	
+	<resultMap type="CampReview" id="CampReviewResultSet">
+		<result property="rvNo" column="RV_NO"/>
+		<result property="resNo" column="RES_NO"/>
+		<result property="cNo" column="CAMPNO"/>
+		<result property="mId" column="M_ID"/>
+		<result property="rvContent" column="RV_CONTENT"/>
+		<result property="rvDate" column="RV_DATE"/>
+		<result property="commentStar" column="COMMENT_STAR"/>
+	
+	</resultMap>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<select id="selectCampingList"  resultMap="CampingResultSet">
+		SELECT *
+		FROM camping
+
+	</select>
+	
+
+	<select id="getListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM camping
+		
+	</select>
+	
+	<update id="addCount" parameterType="_int">
+		UPDATE camping
+		SET C_COUNT=C_COUNT+1
+		WHERE CAMP_NO= #{cNo}
+	</update>
+	
+	<select id="selectOne" resultMap="CampingResultSet">
+		SELECT * FROM CAMPING
+		WHERE CAMP_NO= #{cNo}
+	
+	</select>
+	<insert id="insertReservation" parameterType="Reservation">
+		INSERT INTO reservation
+		VALUES(SEQ_RESERVATION_NO.NEXTVAL, #{cNo}, #{mId }, #{startDate}, #{endDate},#{sumPeople})
+	</insert>
+	
+	<update id="addLike" parameterType="_int">
+		UPDATE camping
+		SET C_RECOMMEND=C_RECOMMEND+1
+		WHERE CAMP_NO= #{cNo}
+
+	</update>
+	<!--리뷰등록  -->
+	 <insert id="insertRivew" parameterType="CampReview">
+		INSERT INTO CAMPREVIEW 
+		VALUES(SEQ_CAMPREVIEW_NO.NEXTVAl,(SELECT RES_NO FROM RESERVATION WHERE M_ID=#{mId} AND CAMP_NO=#{cNo}), #{mId}, #{rvContent}, SYSDATE, #{commentStar}, #{cNo})
+	</insert> 
+
+	<select id="selectreviewList" resultMap="CampReviewResultSet">
+		SELECT * FROM CAMPREVIEW WHERE CAMPNO=#{cNO}
+	</select>
+ 
+	<update id="updateReview" parameterType="CampReview">
+		UPDATE CAMPREVIEW 
+		SET RV_CONTENT= #{rvContent} ,RV_DATE=SYSDATE, COMMENT_STAR=#{commentStar}
+		WHERE CAMPNO=#{cNo} AND M_ID=#{mId}
+	
+	</update>
+	<!--한사람이 한캠핑장을 예약한 개수  -->
+	<select id="selectReservation" resultType="_int">
+		SELECT COUNT(*)
+		FROM reservation WHERE M_ID=#{mId} and CAMP_NO=#{cNo}
+	</select>
+	
+	<!--한 사람이 한 캠핑장당 게시한 게시글 수  -->
+	<select id="sumReview" resultType="_int">
+	SELECT COUNT(*) FROM CAMPREVIEW WHERE M_ID=#{mId} AND CAMPNO=#{cNo} 
+	
+	</select>
+
+	<delete id="deleteReview" parameterType="_int">
+		DELETE FROM CAMPREVIEW WHERE RV_NO=#{rvNo} AND CAMPNO=#{cNo}
+	</delete>
+
+	<!--예약 삭제하는 메소드  -->	
+	<delete id="deleteReservation" parameterType="_int">
+		DELETE FROM reservation WHERE RES_NO=#{resNo}
+	</delete>
+	
+	<!-- 예약정보조회 -->
+   <select id="selectReservationUser" resultMap="ReservationResultSet">
+   select * from RESERVATION where M_ID = #{mId}
+   </select>
+
+
+	<!-- 지도검색하는 메소드 -->
+
+	<select id="searchRegion" resultMap="CampingResultSet">
+		SELECT * FROM CAMPING WHERE C_LOCAL LIKE #{clocal} ||  '%'
+	
+	</select>
+
+	<!--지도 검색 결과 갯수  -->
+	<select id="countSearchMap" resultType="_int">
+	SELECT COUNT(*) FROM CAMPING WHERE  C_LOCAL LIKE #{clocal} ||  '%'
+	
+	</select>
+
+	<!-- 이름으로 검색 -->
+	<select id="searchName" resultMap="CampingResultSet">
+		SELECT * FROM CAMPING WHERE C_NAME LIKE '%'|| #{cName} ||  '%'
+	</select>
+
+	<!-- 위치로 검색 -->
+	<select id="searchAddr" resultMap="CampingResultSet">
+		SELECT * FROM CAMPING WHERE C_ADDR LIKE '%'|| #{cAddr} ||  '%'
+	</select>
+	
+	<!-- 이름으로 검색 게시물의 갯수 가져옴 -->
+	<select id="searchcountName" resultType="_int">
+		SELECT COUNT(*) FROM CAMPING WHERE C_NAME LIKE '%'|| #{cName} ||  '%'
+	</select>
+	
+	<!-- 주소로 검색 게시물의 갯수 가져옴 -->
+	<select id="searchcountAddr" resultType="_int">
+		SELECT COUNT(*) FROM CAMPING WHERE C_ADDR LIKE '%'|| #{cAddr} ||  '%'
+	</select>	
+	
+	<!--메인메뉴에서 좋아요 높은 게시물 보여주는 메소드  -->
+	<select id="showmenuLike" resultMap="CampingResultSet">
+		<![CDATA[SELECT * FROM (SELECT * FROM CAMPING ORDER BY CAMPING.C_RECOMMEND DESC) WHERE ROWNUM <= 3 ]]>
+	</select>
+</mapper>

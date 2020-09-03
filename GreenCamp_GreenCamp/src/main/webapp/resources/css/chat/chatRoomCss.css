@@ -1,0 +1,84 @@
+@charset "UTF-8";
+ * {
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-size: 11px;
+}
+.chat_list_wrap {
+  list-style: none;
+}
+.chat_list_wrap .header {
+  font-size: 2.5em;
+  padding: 15px 0;
+  background: #b1ddab;
+  color: white;
+  text-align: center;
+  font-family: "Josefin Sans", sans-serif;
+}
+.chat_list_wrap .search {
+  background: #eee;
+  padding: 5px;
+}
+.chat_list_wrap .search input[type="text"] {
+  width: 100%;
+  border-radius: 4px;
+  padding: 5px 0;
+  border: 0;
+  text-align: center;
+}
+.chat_list_wrap .list {
+  padding: 0 16px;
+}
+.chat_list_wrap .list {
+  width: 100%;
+  list-style: none;
+  margin-top: 3px;
+}
+.chat_list_wrap .list {
+  padding-top: 10px;
+  padding-bottom: 10px;
+ /*  border-bottom: 1px solid #e5e5e5; */
+}
+.chat_list_wrap .list table {
+  width: 100%;
+}
+.chat_list_wrap .list table td.profile_td {
+  width: 50px;
+  padding-right: 11px;
+}
+.chat_list_wrap .list table td.profile_td img {
+  width: 50px;
+  height: auto;
+}
+.chat_list_wrap .list table td.chat_td .title {
+  font-size: 12px;
+  font-weight: bold;
+}
+.chat_list_wrap .list table td.time_td {
+  width: 90px;
+  padding-right: 40px;
+  text-align: center;
+}
+.chat_list_wrap .list table td.time_td .time {
+  padding-bottom: 4px;
+}
+.chat_list_wrap .list table td.time_td .check p {
+  width: 1.7em;
+    height: 1.5em;
+    margin: 0 auto;
+    padding-top: 0.21em;
+    padding-bottom: 0px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    background: #e51c23;
+    color: white;
+}
+
+/* 테이블 밑에 줄 */
+.chat_list_wrap .chatRoomTable td {
+    padding: 10px 0px 10px; /*상우하좌*/
+	border-bottom: 1px solid #ddd;
+}

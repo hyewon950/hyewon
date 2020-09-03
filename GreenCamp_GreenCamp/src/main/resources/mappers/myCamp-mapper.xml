@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="myCampMapper">
+
+	<!-- 나만의 캠핑장 -->
+	<resultMap type="MyCamp" id="myCampResultSet">
+		<id property="mycNo" column="MYC_NO" />
+		<result property="mId" column="M_ID" />
+		<result property="mycTitle" column="MYC_TITLE" />
+		<result property="mycPlace" column="MYC_PLACE" />
+		<result property="mycDetail" column="MYC_DETAIL" />
+		<result property="mycTag" column="MYC_TAG" />
+		<result property="mycWriteDate" column="MYC_WRITEDATE" />
+		<result property="mycModifyDate" column="MYC_MODIFYDATE" />
+		<result property="mycViewCnt" column="MYC_VIEWCNT" />
+		<result property="mycLikeCnt" column="MYC_LIKECNT" />
+		<result property="mycStatusYN" column="MYC_STATUS" />
+		<!-- <result property="commentStar" column="commentStar"/> -->
+	</resultMap>
+
+	<!-- 나만의 캠핑장 댓글 -->
+	<resultMap type="MyCampComment" id="mycCommentResultSet">
+		<id property="mycCommentNo" column="MYC_COMMENT_NO" />
+		<result property="mycNo" column="MYC_NO" />
+		<result property="mId" column="M_Id" />
+		<result property="mycComment" column="MYC_COMMENT" />
+		<result property="mycCommentDate" column="MYC_COMMENT_DATE" />
+		<result property="mycCommentStar" column="MYC_COMMENT_STAR" />
+		<result property="mycCommentStatus" column="MYC_COMMENT_STATUS" />
+	</resultMap>
+
+	<!-- 나만의 캠핑장 좋아요 -->
+	<resultMap type="MyCampLike" id="mycLikeResultSet">
+		<id property="mycLikeNo" column="MYC_LIKE_NO"/>
+		<result property="mycNo" column="MYC_NO" />
+		<result property="mId" column="M_Id" />
+		<result property="myclikeClick" column="MYC_LIKE_CLICK" />
+	</resultMap>
+	
+	<!-- 나만의 캠핑장 파일 -->
+	<resultMap type="MyCampFile" id="mycFileResultSet">
+		<id property="mycFileNo" column="MYC_FILE_NO"/>
+		<result property="mycNo" column="MYC_NO" />
+		<result property="mycFileName" column="MYC_FILE_NAME" />
+		<result property="mycFileDate" column="MYC_FILE_DATE" />
+		<result property="mycFilePath" column="MYC_FILE_PATH" />
+	</resultMap>
+
+	<!-- top리스트 조회 -->
+	<select id="selectTopList" resultMap="myCampResultSet" parameterType="_int">
+	 <![CDATA[SELECT *
+		FROM 
+ 		(SELECT * FROM MYCAMP
+ 		  ORDER BY MYC_WRITEDATE DESC)
+ 		WHERE ROWNUM <= 3]]> 
+	</select>
+	
+	<!-- 리스트 조회 -->
+	<select id="selectList" resultMap="myCampResultSet">
+		SELECT *
+		FROM MYCAMP
+		ORDER BY
+		MYC_NO DESC
+	</select>
+	
+	<!-- 파일 리스트 조회 -->
+	<select id="selectAllFileList" resultMap="mycFileResultSet">
+		SELECT *
+		FROM MYCAMPFILE
+		WHERE MYC_FILE_NAME LIKE '0%'
+	</select>
+	
+	<!-- 태그 조회 -->
+	<select id="selectTagList" parameterType="MyCampSearch" resultMap="myCampResultSet">
+	 SELECT * FROM MYCAMP
+	WHERE  ${mycSearchTag}
+	ORDER BY MYC_WRITEDATE DESC 
+	</select> 
+
+	<!-- (태그 검색용) 페이징 처리를 위한 게시글 수 조회 -->
+	<select id="getSearchTListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM MYCAMP
+		WHERE ${mycSearchTag}
+	</select>
+	
+	<!-- 페이징 처리를 위한 게시글 수 조회 -->
+	<select id="getListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM MYCAMP
+		WHERE MYC_STATUS = 'Y'
+	</select>
+	
+	<!-- (지도 검색용) 페이징 처리를 위한 게시글 수 조회 -->
+	<select id="getSearchMapListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM MYCAMP
+		WHERE MYC_PLACE LIKE '%' || #{mycSearchValue } || '%'
+	</select>
+	
+	<select id="searchMapList" parameterType="MyCampSearch" resultMap="myCampResultSet">
+		SELECT * FROM MYCAMP
+		WHERE MYC_PLACE LIKE '%' || #{mycSearchValue } || '%'
+		ORDER BY MYC_WRITEDATE DESC
+	</select>
+	
+	<!-- (전체 검색용) 페이징 처리를 위한 게시글 수 조회 -->
+	<select id="getSearchAListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM MYCAMP
+		WHERE (MYC_DETAIL LIKE '%' || #{mycSearchValue } || '%'
+		OR MYC_TITLE LIKE '%' || #{mycSearchValue } || '%')
+	</select>
+	
+	<!-- (제목 검색용) 페이징 처리를 위한 게시글 수 조회 -->
+	<select id="getSearchListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM MYCAMP
+		WHERE MYC_TITLE LIKE '%' || #{mycSearchValue } || '%'
+	</select>
+	
+	<!-- (내용 검색용) 페이징 처리를 위한 게시글 수 조회 -->
+	<select id="getSearchDListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM MYCAMP
+		WHERE MYC_DETAIL LIKE '%' || #{mycSearchValue } || '%'
+	</select>
+	
+	<!-- 게시글 검색용 쿼리 -->
+	<!-- where태그 -->
+	<select id="searchList" parameterType="MyCampSearch" resultMap="myCampResultSet">
+		SELECT * FROM MYCAMP
+		<where>
+			<choose>
+				<when test="mycSearchCondition == 'mycTitle'">
+					MYC_TITLE LIKE '%' || #{mycSearchValue } || '%'
+				</when>
+				<when test="mycSearchCondition == 'mycDetail'">
+					AND MYC_DETAIL LIKE '%' || #{mycSearchValue } || '%'
+				</when>
+				<!-- <when test="mycSearchCondition == 'mycTag'">
+					AND MYC_TAG LIKE '%' || #{mycSearchValue } || '%'
+				</when> -->
+				<otherwise>
+					AND (MYC_TITLE LIKE '%' || #{mycSearchValue } || '%'
+					OR MYC_DETAIL LIKE '%' || #{mycSearchValue } ||  '%')
+				</otherwise>
+			</choose>
+		</where>
+		ORDER BY MYC_WRITEDATE DESC
+	</select>
+
+
+	<!-- 게시글 상세조회 -->
+	<select id="selectOne" parameterType="_int"
+		resultMap="myCampResultSet">
+		SELECT *
+		FROM MYCAMP
+		WHERE MYC_NO = #{mycNo}
+		AND MYC_STATUS =
+		'Y'
+	</select>
+
+	<!-- 조회수 증가 -->
+	<update id="updateCount" parameterType="_int">
+		UPDATE MYCAMP
+		SET
+		MYC_VIEWCNT = MYC_VIEWCNT +1
+		WHERE MYC_NO = #{mycNo}
+	</update>
+
+	<!-- 게시글 등록 쿼리 -->
+	<insert id="insertMyCamp" parameterType="MyCamp">
+		INSERT INTO MYCAMP
+		VALUES(SEQ_MYC_NO.NEXTVAL, #{mId}, #{mycTitle}, #{mycPlace}, #{mycDetail},
+		#{mycTag}, SYSDATE, SYSDATE, #{mycViewCnt}, #{mycLikeCnt}, 'Y')
+	</insert>
+
+	<!-- 게시글 수정쿼리 -->
+	<update id="updateMyCamp" parameterType="MyCamp">
+		UPDATE MYCAMP
+		SET
+		MYC_TITLE=#{mycTitle}, 
+		MYC_PLACE=#{mycPlace},
+		MYC_DETAIL=#{mycDetail},
+		MYC_TAG=#{mycTag},
+		MYC_MODIFYDATE=SYSDATE
+		WHERE MYC_NO=#{mycNo}
+	</update>
+
+	<!-- 게시글 삭제쿼리 -->
+	<delete id="deleteMyCamp" parameterType="_int">
+		DELETE FROM MYCAMP
+		WHERE
+		MYC_NO=#{mycNo}
+	</delete>
+
+	<!-- ============ 댓글 ============ -->
+
+	<!-- 댓글 전체조회 -->
+	<select id="selectCommentList" resultMap="mycCommentResultSet"
+		parameterType="_int">
+		SELECT *
+		FROM MYCAMPCOMMENT C
+		JOIN MYCAMP M USING(MYC_NO)
+		WHERE MYC_NO = #{mycNo}
+		ORDER BY MYC_COMMENT_NO DESC
+	</select>
+
+	<!-- 댓글 등록 -->
+	<insert id="insertComment" parameterType="MyCampComment">
+		INSERT INTO MYCAMPCOMMENT VALUES
+		(SEQ_MYCCOM_NO.NEXTVAL, #{mycNo}, #{mId},
+		#{mycComment}, SYSDATE, #{mycCommentStar}, DEFAULT)
+	</insert>
+
+	<!-- 댓글 수정 -->
+	<update id="updateComment" parameterType="MyCampComment">
+		UPDATE MYCAMPCOMMENT
+		SET 
+		MYC_COMMENT=#{mycComment}, MYC_COMMENT_DATE=SYSDATE,
+		MYC_COMMENT_STAR=#{mycCommentStar}
+		WHERE MYC_COMMENT_NO=#{mycCommentNo}
+	</update>
+
+	<!-- 댓글 삭제 -->
+	<delete id="deleteComment" parameterType="_int">
+		DELETE FROM
+		MYCAMPCOMMENT
+		WHERE MYC_COMMENT_NO=#{mycCommentNo}
+	</delete>
+
+	<!-- =========좋아요=========== -->
+
+	<!-- <insert id="createBoardLike"  parameterType="MyCampLike">
+		INSERT INTO MYCAMPLIKE
+		VALUES (#{mycNo}, #{mId}, #{myclike_cnt})
+	</insert>
+
+	<delete id="deleteBoardLike" parameterType="_int">
+		DELETE FROM MYCAMPLIKE
+		WHERE MYC_NO = #{mycNo} AND M_ID = #{mId}
+	</delete>
+
+	<select id="updateBoardLike">
+		UPDATE MYCAMP
+		SET
+		MYC_LIKECNT = (SELECT COUNT(*)
+		FROM MYCAMPLIKE
+		WHERE MYC_NO = #{mycNo})
+		WHERE MYC_NO = #{mycNo}
+	</select>
+
+	<select id="getBoardLike" resultType="int">
+		SELECT COUNT(M_ID) FROM MYCAMPLIKE WHERE MYC_NO = #{mycNo}
+		AND M_ID = #{mId}
+	</select> -->
+	
+	<!-- <select id="selectMyCampLike" resultMap="mycLikeResultSet" parameterType="_int">
+		SELECT *
+		FROM MYCAMPLIKE C
+		JOIN MYCAMP M USING(MYC_NO)
+		WHERE MYC_NO = #{mycNo}
+		ORDER BY MYC_COMMENT_NO DESC
+	</select> -->
+	
+	<select id="selectMyCampLike" resultMap="mycLikeResultSet" parameterType="_int">
+		SELECT *
+		FROM MYCAMPLIKE C
+		JOIN MYCAMP M USING(MYC_NO)
+		WHERE MYC_NO = #{mycNo}
+	</select>
+
+	<insert id="insertMyCampLike"  parameterType="MyCampLike">
+		INSERT INTO MYCAMPLIKE
+		VALUES (SEQ_MYCLIKE_NO.NEXTVAL, #{mycNo}, #{mId}, 'F')
+	</insert>
+	
+	<update id="updateMyCampLikecnt"  parameterType="MyCampLike">
+		UPDATE MYCAMPLIKE
+		SET
+		MYC_LIKE_CLICK = 'T'
+		WHERE MYC_NO = #{mycNo}
+		AND M_ID = #{mId}
+	</update>
+
+	<!-- <delete id="deleteMyCampLike" parameterType="_int">
+		DELETE FROM MYCAMPLIKE
+		WHERE MYC_NO = #{mycNo} AND M_ID = #{mId}
+	</delete> -->
+
+	<select id="updateMyCampLike" parameterType="MyCampLike">
+		UPDATE MYCAMP
+		SET
+		MYC_LIKECNT = (SELECT COUNT(*)
+		FROM MYCAMPLIKE
+		WHERE MYC_NO = #{mycNo})
+		WHERE MYC_NO = #{mycNo}
+	</select>
+
+	<select id="getMyCampLike" resultType="int">
+		SELECT COUNT(M_ID) FROM MYCAMPLIKE WHERE MYC_NO = #{mycNo}
+		AND M_ID = #{mId}
+	</select>
+	
+	<!-- ============ 파일 ============= -->
+	<!-- 파일 조회 -->
+	<select id="selectFileList" resultMap="mycFileResultSet"
+		parameterType="_int">
+		SELECT *
+		FROM MYCAMPFILE C
+		JOIN MYCAMP M USING(MYC_NO)
+		WHERE MYC_NO = #{mycNo}
+		ORDER BY MYC_FILE_NO DESC
+	</select>
+	
+	<!-- 파일 등록 -->
+	<insert id="insertFile" parameterType="MyCampFile">
+		INSERT INTO MYCAMPFILE VALUES
+		(SEQ_MYCFILE_NO.NEXTVAL, SEQ_MYC_NO.CURRVAL, #{mycFileName},
+		 SYSDATE, #{mycFilePath})
+	</insert>
+	
+	<!-- 파일 삭제 -->
+	<delete id="deleteFile" parameterType="_int">
+		DELETE FROM
+		MYCAMPFILE
+		WHERE MYC_FILE_NO=#{mycFileNo}
+	</delete>
+	
+	<!-- 파일 업뎃 -->
+	<insert id="updateFile" parameterType="MyCampFile">
+		INSERT INTO MYCAMPFILE VALUES
+		(SEQ_MYCFILE_NO.NEXTVAL, #{mycNo}, #{mycFileName},
+		 SYSDATE, #{mycFilePath})
+	</insert>
+	
+</mapper>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="usedBoardMapper">
+
+	<resultMap type="UsedBoard" id="usedBoardResultSet">
+
+		<id property="mId" column="M_ID" />
+		<result property="usedNo" column="USED_NO" />
+		<result property="usedTitle" column="USED_TITLE" />
+		<result property="usedWriter" column="USED_WRITER" />
+		<result property="usedContent" column="USED_CONTENT" />
+		<result property="usedOriginalFilename"
+			column="USED_ORIGINAL_FILENAME" />
+		<result property="usedRenameFilename"
+			column="USED_RENAME_FILENAME" />
+		<result property="usedCount" column="USED_COUNT" />
+		<result property="usedCreateDate" column="USED_CREATE_DATE" />
+		<result property="usedStatus" column="USED_STATUS" />
+		<result property="usedYn" column="USED_YN" />
+		<result property="usedPrice" column="USED_PRICE" />
+		<result property="usedArea" column="USED_AREA" />
+
+	</resultMap>
+
+
+<resultMap type="UsedReply" id="usedReplyResultSet">
+      <result property="commentNo"            column="COMMENT_NO"/>
+      <result property="usedNo"               column="USED_NO"/>
+      <result property="usedRId"              column="USED_R_ID"/>
+      <result property="usedRContent"         column="USED_R_CONTENT"/>
+      <result property="usedRWriter"          column="USED_R_WRITER"/>
+      <result property="usedRCreateDate"      column="USED_R_CREATEDATE"/>
+</resultMap>
+
+
+	<!-- 중고게시판 글 갯수 확인 -->
+	<select id="getUsedListCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM USEDBOARD
+		WHERE USED_STATUS = 'Y'
+	</select>
+
+	<!-- 중고게시판 리스트 보기 -->
+	<select id="selectUsedList" resultMap="usedBoardResultSet">
+		SELECT *
+		FROM USEDBOARD
+		ORDER BY USED_NO DESC
+	</select>
+	
+      <!-- 메인페이지 중고게시판 리스트 보기 -->
+      <select id="selectUsedMainList" resultMap="usedBoardResultSet">
+    <![CDATA[SELECT *FROM 
+       (SELECT * FROM USEDBOARD
+         ORDER BY USED_COUNT DESC)
+       WHERE ROWNUM <= 3]]> 
+      </select>
+	
+	
+
+	<!-- 중고게시판 조회수 -->
+	<update id="updateUsedCount" parameterType="int">
+		UPDATE USEDBOARD
+		SET USED_COUNT = USED_COUNT + 1
+		WHERE USED_NO = #{usedNo}
+	</update>
+
+	<!-- 중고게시판 상세 보기 -->
+	<select id="selectUsedOne" resultMap="usedBoardResultSet">
+		SELECT *
+		FROM USEDBOARD
+		WHERE USED_NO = #{usedNo}
+		<!-- AND USED_STATUS = 'Y' -->
+	</select>
+
+
+	<!-- 중고게시판 글 작성 -->
+	<insert id="insertUsedBoard" parameterType="UsedBoard">
+
+		insert into usedBoard (USED_NO, M_ID, USED_TITLE, USED_WRITER, USED_CONTENT, USED_ORIGINAL_FILENAME, USED_RENAME_FILENAME, USED_COUNT, USED_CREATE_DATE, USED_STATUS, USED_YN, USED_PRICE, USED_AREA)
+		values (
+		seq_used_no.nextval,
+		#{mId},
+		#{usedTitle},
+		#{usedWriter},
+		#{usedContent},
+		#{usedOriginalFilename},
+		#{usedRenameFilename},
+		#{usedCount},
+		SYSDATE,
+		'Y',
+		'N',
+		#{usedPrice},
+		#{usedArea})
+	</insert>
+
+	<!-- 중고게시판 글 수정 -->
+	<update id="updateUsedBoard" parameterType="UsedBoard">
+		update usedBoard set
+		USED_TITLE = #{usedTitle}
+		,USED_WRITER = #{usedWriter}
+		,USED_CONTENT = #{usedContent}
+		,USED_ORIGINAL_FILENAME = #{usedOriginalFilename}
+		,USED_RENAME_FILENAME = #{usedRenameFilename}
+		,USED_COUNT = #{usedCount}
+		,USED_CREATE_DATE = #{usedCreateDate}
+		,USED_STATUS = #{usedStatus}
+		,USED_YN = #{usedYn}
+		,USED_PRICE = #{usedPrice}
+		,USED_AREA = #{usedArea}
+		where USED_NO = #{usedNo}
+	</update>
+
+	<!-- 중고게시판 글삭제 -->
+	<delete id="deleteUsedBoard" parameterType="_int">
+		
+		 DELETE
+		FROM USEDBOARD 
+		WHERE USED_NO = #{usedNo}
+		
+		</delete>
+
+
+
+	<select id="searchList" parameterType="Search"
+		resultMap="usedBoardResultSet">
+		SELECT * FROM USEDBOARD
+		<where>
+			<choose>
+				<when test="searchCondition == 'usedTitle'">
+					USED_TITLE LIKE '%' || #{searchValue } || '%'
+				</when>
+				<when test="searchCondition == 'usedWriter'">
+					AND USED_WRITER LIKE '%' || #{searchValue } || '%'
+				</when>
+				<when test="searchCondition == 'usedContent'">
+					AND USED_CONTENT LIKE '%' || #{searchValue } || '%'
+				</when>
+				<otherwise>
+					AND (USED_WRITER LIKE '%' || #{searchValue } || '%'
+					OR USED_TITLE LIKE '%' || #{searchValue } || '%'
+					OR USED_CONTENT LIKE '%' || #{searchValue } || '%')
+				</otherwise>
+			</choose>
+		</where>
+		ORDER BY USED_CREATE_DATE DESC
+	</select>
+
+
+
+	<!-- 댓글 조회 -->
+	<select id="selectUsedReplyList" resultMap="usedReplyResultSet">
+		SELECT * FROM USEDREPLY WHERE USED_NO = #{usedNo}
+		ORDER BY USED_R_CREATEDATE DESC
+	</select>
+	
+	
+	<!-- 댓글 등록 -->
+	<insert id="insertUsedReply">
+		INSERT INTO USEDREPLY ( COMMENT_NO,USED_NO,USED_R_ID,USED_R_CONTENT,USED_R_WRITER,USED_R_CREATEDATE  )VALUES
+		(SEQ_COMMENT_NO.NEXTVAL, #{usedNo}, #{usedRId}, #{usedRContent},  #{usedRWriter}, SYSDATE)
+	</insert>
+	
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteUsedReply">
+		DELETE FROM USEDREPLY
+		WHERE USED_NO = #{usedNo} AND COMMENT_NO = #{commentNo}
+	</delete>
+	
+	<!-- 등록한 상품 조회 -->
+	<select id="myUsedSelect" resultMap="usedBoardResultSet">
+	select * from USEDBOARD where M_ID=#{mId}
+	</select>
+	
+
+
+</mapper>
+
+

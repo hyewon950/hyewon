@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+
+	<!-- 파일데이터 넣을때 널값 해결코드 -->
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL" />
+		<!-- 
+		만약 null로 데이터가 전달되었다면 빈칸이 아닌 "NULL"로 인식하라고 설정
+		value 설정 시 NULL은 반드시 대문자로 작성
+		(소문자인 경우 지정되지 않은 실제 null로 인식되어 에러 발생)
+		-->
+	</settings>
+
+	<typeAliases>
+		<!-- Member -->
+		<typeAlias type="org.kh.camp.member.domain.Member" alias="Member"/> 
+		<!-- Board -->
+		<typeAlias type="org.kh.camp.board.domain.Board" alias="Board"/>
+		<typeAlias type="org.kh.camp.board.domain.BoardComment" alias="BoardComment"/>
+		<typeAlias type="org.kh.camp.board.domain.BoardSearch" alias="BoardSearch"/> 
+		<typeAlias type="org.kh.camp.board.domain.OrderCondition" alias="OrderCondition"/>
+		<!-- Mycamp --> 
+		<typeAlias type="org.kh.camp.mycamp.domain.MyCamp" alias="MyCamp"/>
+		<typeAlias type="org.kh.camp.mycamp.domain.MyCampComment" alias="MyCampComment"/>
+		<typeAlias type="org.kh.camp.mycamp.domain.MyCampSearch" alias="MyCampSearch"/> 
+		<typeAlias type="org.kh.camp.mycamp.domain.MyCampLike" alias="MyCampLike"/> 
+		<typeAlias type="org.kh.camp.mycamp.domain.MyCampFile" alias="MyCampFile"/>
+		
+		<!-- Used -->
+      <typeAlias type="org.kh.camp.used.domain.UsedBoard" alias="UsedBoard"/>
+      <typeAlias type="org.kh.camp.used.domain.UsedPageInfo" alias="UsedPageInfo"/>
+      <typeAlias type="org.kh.camp.used.domain.UsedReply" alias="UsedReply"/> 
+      <typeAlias type="org.kh.camp.used.domain.Search" alias="Search"/> 
+		
+		<!-- Camping -->
+      	<typeAlias type="org.kh.camp.camping.domain.Camping" alias="Camping"/>
+     	<typeAlias type="org.kh.camp.camping.domain.Reservation" alias="Reservation"/>
+      	<typeAlias type="org.kh.camp.camping.domain.CampReview" alias="CampReview"/>  
+		<!-- Chat -->
+      <typeAlias type="org.kh.camp.chat.domain.ChatRoom" alias="ChatRoom"/>
+      <typeAlias type="org.kh.camp.chat.domain.Message" alias="Message"/>
+      
+      <typeAlias type="org.kh.camp.files.domain.Files" alias="Files"/>
+		
+	</typeAliases>
+
+	<mappers>
+		<mapper resource="mappers/member-mapper.xml"/>
+		<mapper resource="mappers/board-mapper.xml"/>
+		<mapper resource="mappers/myCamp-mapper.xml"/>
+		<mapper resource="mappers/used-mapper.xml"/> 
+		<mapper resource="mappers/camping-mapper.xml"/>
+		<mapper resource="mappers/chat-mapper.xml"/>
+		<mapper resource="mappers/files-mapper.xml"/>
+	</mappers>
+
+</configuration>
