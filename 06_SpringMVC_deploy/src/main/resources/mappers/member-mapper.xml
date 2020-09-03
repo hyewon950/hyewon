@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="memberMapper">
+
+	<resultMap type="Member" id="memberResultSet">
+		<id property="userId" column="USERID"/>
+		<result property="password" column="PASSWORD" />
+		<result property="userName" column="USERNAME" />
+		<result property="email" column="EMAIL" />
+		<result property="gender" column="GENDER" />
+		<result property="age" column="AGE" />
+		<result property="phone" column="PHONE" />
+		<result property="address" column="ADDRESS" />
+		<result property="enrollDate" column="ENROLL_DATE" />
+		<result property="updateDate" column="UPDATE_DATE" />
+		<result property="mStatus" column="M_STATUS" />
+	</resultMap>
+	
+	<!-- 로그인용 쿼리 -->
+	<select id="selectOne" parameterType="Member" 
+			resultMap="memberResultSet">
+		SELECT * FROM MEMBER
+		WHERE USERID = #{userId }
+		AND M_STATUS = 'Y'			
+	</select>
+	
+	<insert id="insertMember" parameterType="Member">
+		INSERT INTO MEMBER
+		VALUES(#{userId}, #{password}, #{userName}
+				, #{email}, #{gender}, #{age}, 
+				#{phone}, #{address},
+				SYSDATE, SYSDATE, DEFAULT)
+	</insert>
+	
+	<!-- 아이디를 넘겨서 검색할 때 검색한 갯수를 리턴 -->
+	<select id="checkIdDup" parameterType="string" 
+			resultType="_int">
+		SELECT COUNT(*) FROM MEMBER WHERE USERID = #{userId}		
+	</select>
+	
+	<update id="updateMember" parameterType="Member">
+		UPDATE MEMBER
+		SET EMAIL = #{email}, AGE = #{age},
+		PHONE = #{phone}, ADDRESS = #{address },
+		UPDATE_DATE = SYSDATE
+		WHERE USERID = #{userId }
+	</update>
+	
+	<update id="deleteMember" parameterType="string">
+		UPDATE MEMBER
+		SET M_STATUS = 'N'
+		WHERE USERID = #{userId }
+	</update>
+	
+	
+	
+	
+	
+	
+</mapper>

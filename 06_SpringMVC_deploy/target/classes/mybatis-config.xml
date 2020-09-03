@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+	
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+		<!--만약 null로 데이터가 전달되었다면 빈칸이 아닌"NULL"로 인식하라고 설정
+			value 설정시 null은 반드시 대문자로 작성
+			(소문자인 경우 저장되지 않은 실제 null로 인식되어 에러 발생)
+		  -->
+	
+	</settings>
+	
+	
+	<typeAliases>
+		<typeAlias type="com.kh.spring.member.domain.Member" alias="Member"/>
+		<typeAlias type="com.kh.spring.notice.domain.Notice" alias="Notice"/>
+		<typeAlias type="com.kh.spring.notice.domain.Search" alias="Search"/>
+		<typeAlias type="com.kh.spring.bord.domain.Board" alias="board"/>
+		<typeAlias type="com.kh.spring.bord.domain.Reply" alias="Reply"/>
+	</typeAliases>
+
+	<mappers>
+		<mapper resource="mappers/member-mapper.xml"/>
+		<mapper resource="mappers/notice-mapper.xml"/>
+		<mapper resource="mappers/board-mapper.xml"/> 
+	</mappers>
+
+	
+
+
+</configuration>

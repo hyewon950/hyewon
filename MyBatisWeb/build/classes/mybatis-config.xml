@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+	<!-- vo 객체의 풀네임 일반 클래스명으로 사용하기 -->
+	<typeAliases>
+		<typeAlias type="member.domain.Member" alias="Member"/>
+		<typeAlias type="lecture.domain.Lecture" alias="Lecture"/>
+	</typeAliases>
+	<!--db연결 설정 정보  -->
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC"></transactionManager>
+			<dataSource type="POOLED">
+				<property name="driver" 	value="oracle.jdbc.driver.OracleDriver" />
+				<property name="url"		value="jdbc:oracle:thin:@localhost:1521:xe" />
+				<property name="username" 	value="mybatis" />
+				<property name="password" 	value="mybatis" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+<!-- 	db에서 사용되는 쿼리문을 담은 mappeer 파일 등록 -->
+		<mapper resource="mappers/member-mapper.xml"/>
+		<mapper resource="lecture/store/mapper/lecture-mapper.xml"/>
+	</mappers>
+	
+</configuration>

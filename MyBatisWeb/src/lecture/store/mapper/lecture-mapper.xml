@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="lecture.store.mapper.LectureMapper">
+
+	<select id="read" parameterType="int" resultType="Lecture">
+		SELECT ID, LECTURENAME, INSTRUCTOR, INTRODUCE
+		FROM LECTURE_TB
+		WHERE ID = #{id}
+	</select>
+	
+	<select id="readAll" resultType="Lecture">
+		SELECT ID, LECTURENAME, INSTRUCTOR, INTRODUCE
+		FROM LECTURE_TB
+		ORDER BY ID ASC
+	</select>
+	<insert id="create" parameterType="Lecture">
+		INSERT INTO LECTURE_TB
+		VALUES(SEQ_ID.NEXTVAL, #{lectureName}, #{instructor}, #{introduce})
+	
+	</insert>
+
+	<update id="update" parameterType="Lecture">
+		UPDATE LECTURE_TB
+		SET lectureName = #{lectureName}, instructor = #{instructor}, introduce = #{introduce}
+		WHERE id = #{id}
+	</update>
+
+
+</mapper>
