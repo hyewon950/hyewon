@@ -1,0 +1,154 @@
+1. ArrayList 생성
+
+ArrayList<Integer> integers1 = new ArrayList<Integer>(); // 타입 지정
+ArrayList<Integer> integers2 = new ArrayList<>(); // 타입 생략 가능
+ArrayList<Integer> integers3 = new ArrayList<>(10); // 초기 용량(Capacity) 설정
+ArrayList<Integer> integers4 = new ArrayList<>(integers1); // 다른 Collection값으로 초기화
+ArrayList<Integer> integers5 = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5)); // Arrays.asList()
+
+
+
+2. ArrayList 엘레멘트 추가/변경
+
+ArrayList를 생성한 후 add() 메소드로 엘레멘트를 추가할 수 있습니다.
+
+또한 set() 메소드로 기존에 추가된 값을 변경하는 것도 가능합니다.
+
+import java.util.ArrayList;
+
+public class ArrayListTest {
+    public static void main(String[] args) {
+        ArrayList<String> colors = new ArrayList<>();
+        // add() method
+        colors.add("Black");
+        colors.add("White");
+        colors.add(0, "Green");
+        colors.add("Red");
+
+        // set() method
+        colors.set(0, "Blue");
+
+        System.out.println(colors);
+    }
+}
+add()는 기본적으로 리스트의 가장 끝에 값을 추가합니다.
+
+별도로 인덱스를 지정하면 해당 인덱스에 값이 추가되고 그 인덱스부터의 값들이 1 칸씩 밀립니다.
+
+결과는 아래와 같이 출력됩니다.
+[Blue, Black, White, Red]
+
+
+Black과 White는 순서대로 추가가 되며 Green이 첫 번째에 추가되면서 Black과 White는 각각 한 칸씩 밀리게 됩니다.
+
+그리고 Red가 맨 끝에 다시 추가되는 것을 확인할 수 있습니다.
+
+마지막으로 set() 메소드를 통해 가장 앞(Index: 0)의 Green이 Blue로 변경됩니다.
+
+
+
+3. ArrayList 엘레멘트 삭제
+추가했던 값을 삭제할 때는 remove() 메소드를 호출합니다.
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class ArrayListTest {
+    public static void main(String[] args) {
+        ArrayList<String> colors = new ArrayList<>(Arrays.asList("Black", "White", "Green", "Red"));
+        String removedColor = colors.remove(0);
+        System.out.println("Removed color is " + removedColor);
+
+        colors.remove("White");
+        System.out.println(colors);
+
+        colors.clear();
+        System.out.println(colors);
+    }
+}
+삭제할 때는 엘레멘트의 인덱스를 입력하거나 엘레멘트를 직접 입력할 수 있습니다.
+
+인덱스를 통해 삭제할 경우 삭제되는 엘레멘트를 리턴받을 수 있습니다.
+
+값을 지움과 동시에 해당 값으로 별도의 작업이 필요한 경우 리턴을 받아서 사용하면 됩니다.
+ArrayList 안의 내용을 전체 삭제할 때는 clear()를 호출하면 됩니다.
+
+
+
+4. ArrayList 전체 값 확인
+ArrayList의 모든 값들을 순회해서 출력하고 싶은 경우 다양한 방법을 사용할 수 있습니다.
+
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.ListIterator;
+
+public class ArrayListTest {
+    public static void main(String[] args) {
+        ArrayList<String> colors = new ArrayList<>(Arrays.asList("Black", "White", "Green", "Red"));
+        // for-each loop
+        for (String color : colors) {
+            System.out.print(color + "  ");
+        }
+        System.out.println();
+
+        // for loop
+        for (int i = 0; i < colors.size(); ++i) {
+            System.out.print(colors.get(i) + "  ");
+        }
+        System.out.println();
+
+        // using iterator
+        Iterator<String> iterator = colors.iterator();
+        while (iterator.hasNext()) {
+            System.out.print(iterator.next() + "  ");
+        }
+        System.out.println();
+
+        // using listIterator
+        ListIterator<String> listIterator = colors.listIterator(colors.size());
+        while (listIterator.hasPrevious()) {
+            System.out.print(listIterator.previous() + "  ");
+        }
+        System.out.println();
+    }
+}
+for-each 반복문으로 각각의 값을 순회해서 출력하는 것이 가능합니다.
+
+또한 get() 메소드로 각 인덱스의 값을 순차적으로 탐색하는 방법도 가능합니다.
+
+그리고 iterator나 listIterator를 통해 값들을 순회하는 것도 가능합니다.
+
+listIterator의 경우 생성 시 ArrayList의 크기를 입력해주고 역방향으로 출력할 수 있습니다.
+
+
+5. 값 존재 유무 확인
+ArrayList의 안에 값이 존재하는지 존재한다면 어느 위치에 존재하는지 알고 싶은 경우가 있습니다.
+
+먼저 값이 존재하는지만 알고 싶은 경우 contains()를 사용합니다.
+
+값이 존재할 때 어느 위치에 존재하는지 알고 싶은 경우 indexOf()를 사용할 수 있습니다.
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class ArrayListTest {
+    public static void main(String[] args) {
+        ArrayList<String> colors = new ArrayList<>(Arrays.asList("Black", "White", "Green", "Red"));
+        boolean contains = colors.contains("Black");
+        System.out.println(contains);
+
+        int index = colors.indexOf("Blue");
+        System.out.println(index);
+
+        index = colors.indexOf("Red");
+        System.out.println(index);
+    }
+}
+
+contains()는 값이 있는 경우 true를, 값이 없는 경우 false를 리턴합니다.
+
+indexOf()는 값이 존재하는 경우 해당 엘레멘트의 인덱스를 리턴합니다.
+
+값이 존재하지 않을 경우 -1을 리턴하기 때문에 별도로 처리가 가능합니다.
+ 
