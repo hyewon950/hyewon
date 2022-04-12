@@ -1,0 +1,103 @@
+내가 한 풀이
+
+
+
+
+
+
+--다른 풀이
+public class FindKim {
+    public String findKim(String[] seoul){
+        //x에 김서방의 위치를 저장하세요.
+        int x = Arrays.asList(seoul).indexOf("Kim");
+
+        return "김서방은 "+ x + "에 있다";
+    }
+    
+    
+    
+newArrayList<>() 와 Arrays.asList() 차이
+    
+new ArrayList<>()는 ArrayList를
+Arrays.asList()는 Arrays의 정적 클래스인 ArrayList를 리턴한다.
+
+ArrayList는 원소를 추가/삭제 할 수 있고, asList는 할 수 없다.
+즉 asList는 특정한 배열에 의해 백업된 고정 크기List로 반환한다.
+만약 add를 시도한다면 
+
+
+List<String> list = Arrays.asList("a", "b", "c");
+list.add("d");
+
+Exception in thread "..." java.lang.UnsupportedOperationException
+    at ...
+    at ...
+    ...
+    
+오류가 발생한다.
+하지만 값을 변경할수 있는 방법이 있음
+
+asList list값 변경하기
+
+1.
+String[] str = {"a", "b", "c"};
+List<String> list = Arrays.asList(str);
+
+2.
+--string [] str 변경
+list.set(1, "d"); // ["a", "d", "c"]
+
+//String[] str 배열을 변경시킨다.
+Arrays.asList()는 String [] str (특정한 배열)를 백업할때 주소값을 가져온다.
+
+따라서 String [] str가 변경되면 list 도 변경된다 
+(ArralyList<>()를 사용하면 새로운 주소값을 할당)
+
+str[1] = "d"; // ["a", "d", "c"] //원소를 추가/삭제 
+
+3.List<String> arrayList = new ArrayList<>(Arrays.asList(list));
+
+
+
+
+
+결론
+
+
+1. new ArrayList<>() - 컬렉션 생성 시, 새로운 주소값으로 할당하기 위한 용도
+
+public class Lotto {
+   private List<LottoNumber> lotto;
+   // 설명을 위해 파라미터 List는 inputLotto 라고 하겠다.
+   public Lotto(List<LottoNumber> inputLotto) {
+       this.lotto = new ArrayList<>(inputLotto);
+   }
+}
+이렇게 List를 받을 때 new ArrayList<>() 사용한다.
+
+왜?? this.lotto = inputLotto;로 값을 할당하면 무엇이 문제냐???
+
+파라미터로 들어온 inputLotto의 배열이 변경된다면 Lotto의 List<LottoNumber> lotto도 변경되기 때문이다.
+
+this.lotto = new ArrayList<>(inputLotto);로 할당한다면 주소값이 다르기 때문에 위와 같은 문제가 발생하지 않는다.
+
+2. Arrays.asList() - 테스트 케이스 처럼, 요소의 개수가 제한되어 사용되는 경우
+
+@Test
+void Test() {
+   List<Car> cars = Arrays.asList(new Car("K2"), new Car("Sonata")); 
+   ...
+}
+List<Car> cars를 통해 테스트하려고 한다.
+
+위와 같은 상황은 한번 배열이 만들어지면 추가나 삭제될 일이 없다.
+
+이때 Arrays.asList()를 사용한다.
+
+필자는 배열의 size가 변하면 안 되거나 변할 필요가 없을 때 Arrays.asList()를 사용한다.
+
+
+
+
+
+
