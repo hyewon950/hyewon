@@ -1,0 +1,19 @@
+문자열을 기본형값으로 변환하는 방법
+
+1. 문자-> 숫자
+int i=Integer.parsInt("100");
+int i2=Integer.valueOf("100")
+
+2. 숫자 -> 문자
+int i = 100;
+String str1=i+"";
+String str2=String.valueOf(i);
+String strNum1 = Integer.toString(i);
+
+
+
+
+3.문자 -> 문자
+char c="A".charAt(0);
+
+
