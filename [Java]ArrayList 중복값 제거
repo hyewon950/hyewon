@@ -1,0 +1,37 @@
+
+
+1.ArrayList의 데이터를 contains()메소드를 사용하여 중복 값을 제거
+
+ArrayList<String> arrayList = new ArrayList<String>();
+arrayList.add("C");
+arrayList.add("A");
+arrayList.add("B");
+arrayList.add("C");
+arrayList.add("C");
+
+List<String> resultList = new ArrayList<String>();
+for(String a : arrayList) {
+    if(!resultList.contains(a)){
+          resultList.add(a);
+    
+    
+    }
+
+}
+
+
+2.set을 사용해서 제거
+ //HashSet은 중복을 허용하지 않음
+ArraList<String> arrayList = new ArrayList<String>();
+ arrayList.add("C");
+arrayList.add("A");
+arrayList.add("B");
+arrayList.add("C");
+arrayList.add("C");
+
+//HashSet를 사용하여 중복제거
+HashSet<String> duplicationData = new HashSet<String>(arrayList);
+resultList = new ArrayList<String>(duplicateData);
+
+
+
